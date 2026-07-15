@@ -29,7 +29,7 @@ export default function ScholarshipsPage() {
             name: course.name,
             credits: course.credits,
             category: course.aiRelevant ? "AI" : "일반",
-            code: course.code ?? course.name,
+            code: course.name,
             grade: course.grade
           }))
         );
