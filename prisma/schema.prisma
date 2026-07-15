@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EnrollmentStatus {
+  REGULAR
+  LEAVE_OF_ABSENCE
+  EXCESS_SEMESTER
+  EXCHANGE
+}
+
+enum SourceType {
+  INTERNAL
+  EXTERNAL
+}
+
+enum FundingType {
+  TUITION
+  LIVING_EXPENSE
+  OTHER
+}
+
+enum ScholarshipStatus {
+  ACTIVE
+  CLOSED
+  DRAFT
+}
+
+enum DataSource {
+  CRAWLER
+  MANUAL
+  ADMIN_IMPORT
+}
+
+enum RuleOperator {
+  GTE
+  LTE
+  EQ
+  NEQ
+  IN
+  NOT_IN
+  REQUIRED
+  FORBIDDEN
+}
+
+enum DocumentType {
+  TRANSCRIPT
+  ENROLLMENT_CERT
+  PERSONAL_STATEMENT
+  RECOMMENDATION_LETTER
+  FAMILY_RELATION_CERT
+  INCOME_PROOF
+  ACTIVITY_PROOF
+  PRIVACY_CONSENT
+  OTHER
+}
+
+enum MatchStatus {
+  ELIGIBLE
+  CONDITIONAL
+  INELIGIBLE
+}
+
+enum ApplicationStatus {
+  NOT_STARTED
+  PREPARING
+  SUBMITTED
+  RESULT_WAITING
+  APPROVED
+  REJECTED
+}
+
+model Student {
+  id String @id @default(cuid())
+  studentId String @unique
+  name String
+  email String @unique
+  college String
+  department String
+  majors String[]
+  grade Int
+  enrollmentStatus EnrollmentStatus
+  gpa Float
+  creditsLastSem Int
+  totalCredits Int
+  incomeQuintile Int?
+  nationalScholarshipApplied Boolean @default(false)
+  isExchangeStudent Boolean @default(false)
+  region String?
+  gender String?
+  isForeigner Boolean @default(false)
+  activities StudentActivity[]
+  documents Document[]
+  applications Application[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentActivity {
+  id String @id @default(cuid())
+  studentId String
+  student Student @relation(fields: [studentId], references: [id])
+  type String
+  description String
+  hours Int?
+  verified Boolean @default(false)
+}
+
+model Scholarship {
+  id String @id @default(cuid())
+  name String
+  provider String
+  sourceType SourceType
+  fundingType FundingType
+  amount Int?
+  amountDescription String?
+  numberOfRecipients Int?
+  applicationStartDate DateTime?
+  applicationEndDate DateTime
+  paymentTiming String?
+  duplicateAllowed Boolean @default(false)
+  sourceUrl String?
+  rawAnnouncementText String?
+  eligibility EligibilityRule[]
+  requiredDocuments RequiredDocument[]
+  applications Application[]
+  status ScholarshipStatus @default(ACTIVE)
+  createdBy DataSource
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EligibilityRule {
+  id String @id @default(cuid())
+  scholarshipId String
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id])
+  field String
+  operator RuleOperator
+  value String
+  isMandatory Boolean @default(true)
+  displayText String
+}
+
+model RequiredDocument {
+  id String @id @default(cuid())
+  scholarshipId String
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id])
+  documentType DocumentType
+  isMandatory Boolean @default(true)
+  description String?
+}
+
+model Document {
+  id String @id @default(cuid())
+  studentId String
+  student Student @relation(fields: [studentId], references: [id])
+  type DocumentType
+  fileName String
+  filePath String
+  uploadedAt DateTime @default(now())
+  expiresAt DateTime?
+}
+
+model Application {
+  id String @id @default(cuid())
+  studentId String
+  student Student @relation(fields: [studentId], references: [id])
+  scholarshipId String
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id])
+  matchStatus MatchStatus
+  matchScore Int
+  matchDetails Json
+  applicationStatus ApplicationStatus @default(NOT_STARTED)
+  documentsChecklist Json?
+  reminderDates DateTime[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

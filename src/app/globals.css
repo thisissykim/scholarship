@@ -1,0 +1,41 @@
+:root {
+  --bg-base: #121212;
+  --bg-surface: #181818;
+  --bg-surface-alt: #1f1f1f;
+  --bg-card: #252525;
+  --bg-card-alt: #272727;
+  --brand-green: #1ed760;
+  --brand-green-border: #1db954;
+  --text-base: #ffffff;
+  --text-light: #fdfdfd;
+  --text-secondary: #b3b3b3;
+  --text-tertiary: #cbcbcb;
+  --text-negative: #f3727f;
+  --text-warning: #ffa42b;
+  --text-announcement: #539df5;
+  --border-gray: #4d4d4d;
+  --border-light: #7c7c7c;
+  --shadow-heavy: rgba(0,0,0,0.5) 0px 8px 24px;
+  --shadow-medium: rgba(0,0,0,0.3) 0px 8px 8px;
+  --shadow-inset: rgb(18,18,18) 0px 1px 0px, rgb(124,124,124) 0px 0px 0px 1px inset;
+  --radius-badge: 2px;
+  --radius-input: 4px;
+  --radius-card: 6px;
+  --radius-section: 8px;
+  --radius-panel: 10px;
+  --radius-large-btn: 100px;
+  --radius-pill: 500px;
+  --radius-full: 9999px;
+  --radius-circle: 50%;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg-base); color: var(--text-base); font-family: SUIT, -apple-system, Pretendard, "Noto Sans KR", "Helvetica Neue", Arial, sans-serif; }
+body { background:
+  radial-gradient(circle at top left, rgba(30,215,96,0.08), transparent 22%),
+  linear-gradient(180deg, #121212 0%, #0f0f0f 100%);
+}
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+
+::selection { background: rgba(30,215,96,0.28); color: #fff; }
