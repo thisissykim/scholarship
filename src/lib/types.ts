@@ -61,6 +61,7 @@ export type RuleEvalResult = {
 
 export type ParsedCourse = {
   name: string;
+  code?: string;
   credits: number;
   semester?: string;
   grade?: string;
