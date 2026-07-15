@@ -68,6 +68,7 @@ export type ParsedCourse = {
 };
 
 export type ParsedDocumentAnalysis = {
+  fileName?: string;
   extractedText: string;
   courses: ParsedCourse[];
   totalCredits: number;
