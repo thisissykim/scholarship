@@ -21,7 +21,14 @@ export default function ScholarshipsPage() {
       setGpa(profile.gpa ?? gpa);
       setNational(profile.nationalScholarshipApplied ?? national);
       if (profile.uploadedAnalysis?.courses?.length) {
-        setCourses(profile.uploadedAnalysis.courses.map((course) => ({ ...course, code: course.code ?? course.name })));
+        setCourses(
+          profile.uploadedAnalysis.courses.map((course) => ({
+            name: course.name,
+            credits: course.credits,
+            category: course.aiRelevant ? "AI" : "일반",
+            code: course.code ?? course.name
+          }))
+        );
       }
     }
   }, []);
