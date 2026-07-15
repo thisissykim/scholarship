@@ -7,12 +7,15 @@ import { getStoredProfile } from "@/lib/student-store";
 import { StatusBadge } from "@/components/ui";
 import { scholarshipBank } from "@/lib/scholarship-bank";
 import { matchAllScholarships } from "@/lib/scholarshipMatcher";
+import type { Course } from "@/types/scholarship";
 
 export default function ScholarshipsPage() {
   const [credits, setCredits] = useState(demoStudent.totalCredits);
   const [gpa, setGpa] = useState(demoStudent.gpa);
   const [national, setNational] = useState(demoStudent.nationalScholarshipApplied);
-  const [courses, setCourses] = useState(demoStudent.majors.map((major) => ({ name: major, credits: 3, category: "전공", code: major })));
+  const [courses, setCourses] = useState<Course[]>(
+    demoStudent.majors.map((major) => ({ name: major, credits: 3, category: "전공", code: major }))
+  );
 
   useEffect(() => {
     const profile = getStoredProfile();
@@ -26,7 +29,8 @@ export default function ScholarshipsPage() {
             name: course.name,
             credits: course.credits,
             category: course.aiRelevant ? "AI" : "일반",
-            code: course.code ?? course.name
+            code: course.code ?? course.name,
+            grade: course.grade
           }))
         );
       }
